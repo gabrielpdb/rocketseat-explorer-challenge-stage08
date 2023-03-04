@@ -1,3 +1,4 @@
+const AppError = require('../utils/AppError')
 const knex = require('../database/knex')
 
 class NotesController {
@@ -72,9 +73,13 @@ class NotesController {
   async delete(req, res) {
     const { id } = req.params
 
-    await knex('notes').where({ id }).delete()
+    const deleteOk = await knex('notes').where({ id }).delete()
 
-    return res.json()
+    if (!deleteOk) {
+      throw new AppError('Nota não encontrada')
+    }
+
+    return res.json({ retorno })
   }
 }
 
