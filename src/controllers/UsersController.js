@@ -58,6 +58,28 @@ class UsersController {
 
     return res.json()
   }
+
+  async index(req, res) {
+    const users = await knex('users')
+
+    return res.json(users)
+  }
+
+  async show(req, res) {
+    const { id } = req.params
+
+    const user = await knex('users').where({ id }).first()
+
+    return res.json(user)
+  }
+
+  async delete(req, res) {
+    const { id } = req.params
+
+    await knex('users').where({ id }).delete()
+
+    return res.json()
+  }
 }
 
 module.exports = UsersController
