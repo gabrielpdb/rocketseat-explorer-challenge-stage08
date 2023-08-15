@@ -139,13 +139,26 @@ class NotesController {
     return res.json(notesPromise)
   }
 
-  /* async show(req, res) {
+  async show(req, res) {
     const { id } = req.params
 
-    const user = await knex('users').where({ id }).first()
+    let note = await knex('notes').where({ id }).first()
 
-    return res.json(user)
-  } */
+    const tags = await knex('tags')
+
+    const filteredTags = tags.filter(tag => {
+      if (tag.note_id === note.id) {
+        return tag
+      }
+    })
+
+    note = {
+      ...note,
+      tags: filteredTags
+    }
+
+    return res.json(note)
+  }
 
   /* async delete(req, res) {
     const { id } = req.params
