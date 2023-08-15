@@ -1,6 +1,17 @@
+const knex = require('../database/knex')
+const AppError = require('../utils/AppError')
+
 class TagsController {
-  async create(req, res) {
-    return res.json()
+  async index(req, res) {
+    const { user_id } = req.params
+
+    const tags = await knex('tags').where({ user_id })
+
+    if (!tags) {
+      throw new AppError('Nenhuma tag encontrada')
+    }
+
+    return res.json(tags)
   }
 }
 
