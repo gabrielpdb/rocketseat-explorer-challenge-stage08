@@ -39,6 +39,8 @@ class UsersController {
 
     user.name = name ?? user.name
     user.email = email ?? user.email
+    user.avatar = avatar ?? user.avatar
+    user.updated_at = knex.fn.now()
 
     if (new_password && !old_password) {
       throw new AppError('Informe a senha antiga para definir nova senha')
