@@ -136,13 +136,25 @@ class NotesController {
 
     const notesPromise = await Promise.all(newNotes)
 
+    if (notesPromise.length === 0) {
+      throw new AppError('Nenhuma nota encontrada')
+    }
+
     return res.json(notesPromise)
   }
 
   async show(req, res) {
     const { id } = req.params
 
+    if (!id) {
+      throw new AppError('Informe o id da nota para buscar')
+    }
+
     let note = await knex('notes').where({ id }).first()
+
+    if (!note) {
+      throw new AppError('Nota não encontrada')
+    }
 
     const tags = await knex('tags')
 
@@ -160,13 +172,13 @@ class NotesController {
     return res.json(note)
   }
 
-  /* async delete(req, res) {
+  async delete(req, res) {
     const { id } = req.params
 
-    await knex('users').where({ id }).delete()
+    await knex('notes').where({ id }).delete()
 
     return res.json()
-  } */
+  }
 }
 
 module.exports = NotesController
